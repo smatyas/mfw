@@ -39,19 +39,19 @@ Development
     composer install
     ```
    
-7. Load the fixtures to fill the DB with some initial data:
+6. Load the fixtures to fill the DB with some initial data:
 
     TODO
     
-8. The site is now available at the port `8000` on your docker host address, i.e.: http://192.168.99.100:8000/
+7. The site is now available at the port `8000` on your docker host address, i.e.: http://192.168.99.100:8000/
 
-9. You can run the tests:
+8. You can run the tests:
 
     ```
     vendor/bin/phpunit
     ```
 
-10. Test the code style:
+9. Test the code style:
 
     ```
     vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
