@@ -50,3 +50,9 @@ Development
     ```
     vendor/bin/phpunit
     ```
+
+10. Test the code style:
+
+    ```
+    vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
+    ```
