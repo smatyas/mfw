@@ -28,9 +28,10 @@ interface RouteInterface
      * Handles the given Request.
      *
      * @param Request $request
+     * @param TemplatingInterface $templating
      * @return mixed
      */
-    public function handle(Request $request);
+    public function handle(Request $request, TemplatingInterface $templating);
 
     /**
      * Returns the template path.

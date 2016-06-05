@@ -161,7 +161,7 @@ class Application
      */
     protected function createResponse(RouteInterface $route, Request $request)
     {
-        $response = $route->handle($request);
+        $response = $route->handle($request, $this->getTemplating());
         if (!($response instanceof Response)) {
             $rendered = $this->getTemplating()->render($route->getTemplatePath(), $response);
             $response = new Response($rendered);
@@ -178,6 +178,9 @@ class Application
     protected function sendResponse(Response $response)
     {
         http_response_code($response->getCode());
+        foreach ($response->getHeaders() as $header) {
+            header($header);
+        }
         print $response->getBody();
     }
 }

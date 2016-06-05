@@ -13,4 +13,5 @@ namespace Smatyas\Mfw\Controller;
 
 interface ControllerInterface
 {
+    public function setTemplating($templating);
 }

@@ -11,6 +11,28 @@
 
 namespace Smatyas\Mfw\Controller;
 
+use Smatyas\Mfw\Router\TemplatingInterface;
+
 abstract class AbstractController implements ControllerInterface
 {
+    /**
+     * @var TemplatingInterface
+     */
+    protected $templating;
+
+    /**
+     * @return TemplatingInterface
+     */
+    public function getTemplating()
+    {
+        return $this->templating;
+    }
+
+    /**
+     * @param TemplatingInterface $templating
+     */
+    public function setTemplating($templating)
+    {
+        $this->templating = $templating;
+    }
 }

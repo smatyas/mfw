@@ -54,7 +54,7 @@ class Templating implements TemplatingInterface
      */
     protected function getTemplatePath($template)
     {
-        return realpath(sprintf('%s/Resource/view/%s', $this->getAppBasePath(), $template));
+        return sprintf('%s/Resource/view/%s', $this->getAppBasePath(), $template);
     }
 
     /**
@@ -63,10 +63,10 @@ class Templating implements TemplatingInterface
     public function render($template, $parameters)
     {
         $templatePath = $this->getTemplatePath($template);
-        if (!is_readable($templatePath)) {
+        if (!is_readable(realpath($templatePath))) {
             throw new \RuntimeException('Cannot read template file: ' . $templatePath);
         }
-        
+
         $rendered = file_get_contents($templatePath);
         foreach ($parameters as $key => $value) {
             $pattern = sprintf('/{{\\$%s}}/', $key);

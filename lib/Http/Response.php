@@ -29,15 +29,24 @@ class Response
     protected $body;
 
     /**
+     * The HTTP headers.
+     *
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
      * Creates a Response instance.
      *
      * @param $body
      * @param int $code
+     * @param array $headers
      */
-    public function __construct($body, $code = 200)
+    public function __construct($body, $code = 200, $headers = [])
     {
         $this->setBody($body);
         $this->setCode($code);
+        $this->setHeaders($headers);
     }
 
     /**
@@ -70,5 +79,21 @@ class Response
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param array $headers
+     */
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
     }
 }

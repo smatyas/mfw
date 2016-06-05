@@ -29,6 +29,20 @@ class Request
     protected $method;
 
     /**
+     * The GET parameters.
+     *
+     * @var array
+     */
+    protected $getParameters = [];
+
+    /**
+     * The POST parameters.
+     *
+     * @var array
+     */
+    protected $postParameters = [];
+
+    /**
      * Creates a Request instance from the server globals.
      *
      * @return Request
@@ -38,6 +52,8 @@ class Request
         $request = new self();
         $request->setUri($_SERVER['REQUEST_URI']);
         $request->setMethod($_SERVER['REQUEST_METHOD']);
+        $request->setGetParameters($_GET);
+        $request->setPostParameters($_POST);
 
         return $request;
     }
@@ -76,5 +92,51 @@ class Request
     public function setMethod($method)
     {
         $this->method = $method;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGetParameters()
+    {
+        return $this->getParameters;
+    }
+
+    /**
+     * @param array $getParameters
+     */
+    public function setGetParameters($getParameters)
+    {
+        $this->getParameters = $getParameters;
+    }
+
+    public function getGetParameter($parameter, $default = null)
+    {
+        $parameters = $this->getGetParameters();
+
+        return isset($parameters[$parameter]) ? $parameters[$parameter] : $default;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPostParameters()
+    {
+        return $this->postParameters;
+    }
+
+    /**
+     * @param array $postParameters
+     */
+    public function setPostParameters($postParameters)
+    {
+        $this->postParameters = $postParameters;
+    }
+
+    public function getPostParameter($parameter, $default = null)
+    {
+        $parameters = $this->getPostParameters();
+        
+        return isset($parameters[$parameter]) ? $parameters[$parameter] : $default;
     }
 }

@@ -18,4 +18,22 @@ $route->setPath('/');
 $route->setController('Smatyas\\MfwApp\\Controller\\DefaultController');
 $app->getRouter()->addRoute($route);
 
+$route = new Route();
+$route->setPath('/login');
+$route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
+$app->getRouter()->addRoute($route);
+
+$route = new Route();
+$route->setPath('/login/captcha');
+$route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
+$route->setControllerAction('captcha');
+$app->getRouter()->addRoute($route);
+
+$route = new Route();
+$route->setPath('/login/check');
+$route->setMethod('POST');
+$route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
+$route->setControllerAction('check');
+$app->getRouter()->addRoute($route);
+
 $app->run();
