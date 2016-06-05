@@ -14,7 +14,7 @@ $app = new Application();
 $app->setAppBasePath(__DIR__ . '/../src');
 
 $route = new Route();
-$route->setPath('/test');
+$route->setPath('/');
 $route->setController('Smatyas\\MfwApp\\Controller\\DefaultController');
 $app->getRouter()->addRoute($route);
 

@@ -35,6 +35,7 @@ services:
     volumes_from:
       - content
     links:
+      - memcached
       - db
 
   php-fpm-2:
@@ -45,7 +46,11 @@ services:
     volumes_from:
       - content
     links:
+      - memcached
       - db
+
+  memcached:
+    image: memcached
 
   db:
     image: mysql

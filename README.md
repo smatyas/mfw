@@ -23,6 +23,7 @@ Development
      - docker_web-2 - nginx web worker #2
      - docker_php-fpm-1 - PHP worker #1
      - docker_php-fpm-2 - PHP worker #2
+     - memcached - a memcached server
      - mysql - a MySQL database server
     
 4. Log in into one of the `php-fpm` containers:

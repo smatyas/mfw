@@ -48,6 +48,7 @@ class Application
      */
     public function run()
     {
+        session_start();
         try {
             $request = Request::createFromGlobals();
             $route = $this->getRoute($request);

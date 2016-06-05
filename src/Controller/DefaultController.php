@@ -20,10 +20,12 @@ class DefaultController extends AbstractController
     {
         return [
             'title' => 'Main page',
-            'controller' => __METHOD__,
-            'hostname' => gethostname(),
             'var1' => date(DATE_ISO8601),
             'var2' => rand(1, 10000),
+            'controller' => __METHOD__,
+            'hostname' => gethostname(),
+            'session_id' => session_id(),
+            'session_data' => json_encode($_SESSION),
         ];
     }
 }
