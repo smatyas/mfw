@@ -11,6 +11,7 @@
 
 namespace Smatyas\Mfw\Router;
 
+use Smatyas\Mfw\Container\Container;
 use Smatyas\Mfw\Controller\ControllerInterface;
 use Smatyas\Mfw\Http\Request;
 
@@ -142,10 +143,10 @@ class Route implements RouteInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(Request $request, TemplatingInterface $templating)
+    public function handle(Request $request, Container $container)
     {
         $controller = $this->getControllerInstance();
-        $controller->setTemplating($templating);
+        $controller->setContainer($container);
         $action = $this->getControllerAction();
 
         return $controller->$action($request);

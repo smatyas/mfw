@@ -11,7 +11,22 @@
 
 namespace Smatyas\Mfw\Controller;
 
+use Smatyas\Mfw\Container\Container;
+
 interface ControllerInterface
 {
-    public function setTemplating($templating);
+    /**
+     * Sets the service container.
+     *
+     * @param Container $container
+     */
+    public function setContainer(Container $container);
+
+    /**
+     * Gets the named service.
+     *
+     * @param $service
+     * @return mixed
+     */
+    public function get($service);
 }

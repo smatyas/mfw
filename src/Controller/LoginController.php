@@ -25,7 +25,7 @@ class LoginController extends AbstractController
         $errors = '';
         if (isset($_SESSION['flashes']['error'])) {
             foreach ($_SESSION['flashes']['error'] as $message) {
-                $errors .= $this->getTemplating()->render('error.html.tpl', ['message' => $message]);
+                $errors .= $this->get('templating')->render('error.html.tpl', ['message' => $message]);
             }
             unset($_SESSION['flashes']['error']);
         }

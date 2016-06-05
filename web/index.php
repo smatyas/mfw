@@ -10,30 +10,32 @@ require $autoloader;
 use Smatyas\Mfw\Application;
 use Smatyas\Mfw\Router\Route;
 
-$app = new Application();
-$app->setAppBasePath(__DIR__ . '/../src');
+$applicationConfig = [
+    'app_base_path' => __DIR__ . '/../src',
+];
+$app = new Application($applicationConfig);
 
 $route = new Route();
 $route->setPath('/');
 $route->setController('Smatyas\\MfwApp\\Controller\\DefaultController');
-$app->getRouter()->addRoute($route);
+$app->get('routing')->addRoute($route);
 
 $route = new Route();
 $route->setPath('/login');
 $route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
-$app->getRouter()->addRoute($route);
+$app->get('routing')->addRoute($route);
 
 $route = new Route();
 $route->setPath('/login/captcha');
 $route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
 $route->setControllerAction('captcha');
-$app->getRouter()->addRoute($route);
+$app->get('routing')->addRoute($route);
 
 $route = new Route();
 $route->setPath('/login/check');
 $route->setMethod('POST');
 $route->setController('Smatyas\\MfwApp\\Controller\\LoginController');
 $route->setControllerAction('check');
-$app->getRouter()->addRoute($route);
+$app->get('routing')->addRoute($route);
 
 $app->run();

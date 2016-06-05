@@ -12,6 +12,7 @@
 namespace Smatyas\Mfw\Router;
 
 
+use Smatyas\Mfw\Container\Container;
 use Smatyas\Mfw\Http\Request;
 
 interface RouteInterface
@@ -28,10 +29,10 @@ interface RouteInterface
      * Handles the given Request.
      *
      * @param Request $request
-     * @param TemplatingInterface $templating
+     * @param Container $container
      * @return mixed
      */
-    public function handle(Request $request, TemplatingInterface $templating);
+    public function handle(Request $request, Container $container);
 
     /**
      * Returns the template path.

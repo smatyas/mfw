@@ -11,6 +11,7 @@
 
 namespace Smatyas\Mfw;
 
+use Smatyas\Mfw\Container\Container;
 use Smatyas\Mfw\Http\Exception\HttpException;
 use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
 use Smatyas\Mfw\Http\Request;
@@ -34,14 +35,61 @@ class Application
     protected $appBasePath;
 
     /**
-     * @var RouterInterface
+     * The application configuration.
+     *
+     * @var array
      */
-    protected $router;
+    protected $config;
 
     /**
-     * @var TemplatingInterface
+     * The service container.
+     *
+     * @var Container
      */
-    protected $templating;
+    protected $container;
+
+    /**
+     * Creates a new application instance.
+     *
+     * @param $config
+     */
+    public function __construct($config)
+    {
+        $this->validateAndSetConfig($config);
+        $this->setAppBasePath($config['app_base_path']);
+        $this->container = new Container();
+        $this->getContainer()->add('routing', $this->getConfig()['routing']);
+        $this->getContainer()->add('templating', $this->getConfig()['templating']);
+    }
+
+    /**
+     * Validates and sets the application configuration.
+     *
+     * @param $config
+     */
+    protected function validateAndSetConfig($config)
+    {
+        $mandatoryParameters = ['app_base_path'];
+        foreach ($mandatoryParameters as $mandatoryParameter) {
+            if (!array_key_exists($mandatoryParameter, $config)) {
+                throw new \RuntimeException('Mandatory application config parameter missing: ' . $mandatoryParameter);
+            }
+        }
+
+        if (isset($config['routing']) && !($config['routing'] instanceof RouterInterface)) {
+            throw new \RuntimeException('The "routing" service must implement the RouterInterface');
+        } else {
+            $config['routing'] = new Router();
+        }
+
+        if (isset($config['templating']) && !($config['templating'] instanceof TemplatingInterface)) {
+            throw new \RuntimeException('The "templating" service must implement the TemplatingInterface');
+        } else {
+            $config['templating'] = new Templating($config['app_base_path']);
+        }
+
+        $this->config = $config;
+    }
 
     /**
      * Runs the application.
@@ -84,55 +132,34 @@ class Application
     }
 
     /**
-     * Gets the router instance.
+     * Gets the application configuration.
      *
-     * @return RouterInterface
+     * @return array
      */
-    public function getRouter()
+    public function getConfig()
     {
-        if (null === $this->router) {
-            // Create the default router if nothing is configured yet.
-            $router = new Router();
-            $this->setRouter($router);
-        }
-
-        return $this->router;
+        return $this->config;
     }
 
     /**
-     * Sets the router instance.
+     * Gets the service with the given key.
      *
-     * @param RouterInterface $router
+     * @param $key
+     * @return mixed
      */
-    public function setRouter(RouterInterface $router)
+    public function get($key)
     {
-        $this->router = $router;
+        return $this->getContainer()->get($key);
     }
 
     /**
-     * Gets the templateing instance.
+     * Gets the service container.
      *
-     * @return TemplatingInterface
+     * @return Container
      */
-    public function getTemplating()
+    public function getContainer()
     {
-        if (null === $this->templating) {
-            // Create the default templating if nothing is configured yet.
-            $templating = new Templating($this->getAppBasePath());
-            $this->setTemplating($templating);
-        }
-
-        return $this->templating;
-    }
-
-    /**
-     * Sets the templating instance.
-     *
-     * @param TemplatingInterface $templating
-     */
-    public function setTemplating($templating)
-    {
-        $this->templating = $templating;
+        return $this->container;
     }
 
     /**
@@ -145,7 +172,7 @@ class Application
      */
     protected function getRoute(Request $request)
     {
-        $route = $this->getRouter()->match($request);
+        $route = $this->get('routing')->match($request);
         if (null === $route) {
             throw new NotFoundHttpException();
         }
@@ -161,9 +188,9 @@ class Application
      */
     protected function createResponse(RouteInterface $route, Request $request)
     {
-        $response = $route->handle($request, $this->getTemplating());
+        $response = $route->handle($request, $this->getContainer());
         if (!($response instanceof Response)) {
-            $rendered = $this->getTemplating()->render($route->getTemplatePath(), $response);
+            $rendered = $this->get('templating')->render($route->getTemplatePath(), $response);
             $response = new Response($rendered);
             return $response;
         }
