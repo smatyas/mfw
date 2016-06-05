@@ -16,6 +16,7 @@ use Smatyas\Mfw\Http\Exception\HttpException;
 use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
+use Smatyas\Mfw\Router\Route;
 use Smatyas\Mfw\Router\RouteInterface;
 use Smatyas\Mfw\Router\Router;
 use Smatyas\Mfw\Router\RouterInterface;
@@ -160,6 +161,24 @@ class Application
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Adds a route to the application.
+     *
+     * @param $path
+     * @param $controller
+     * @param string $action
+     * @param string $method
+     */
+    public function addRoute($path, $controller, $action = 'index', $method = 'GET')
+    {
+        $route = new Route();
+        $route->setPath($path);
+        $route->setController($controller);
+        $route->setControllerAction($action);
+        $route->setMethod($method);
+        $this->get('routing')->addRoute($route);
     }
 
     /**
