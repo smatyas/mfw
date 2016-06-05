@@ -14,7 +14,10 @@ namespace Smatyas\Mfw\Http;
 class RedirectResponse extends Response
 {
     /**
-     * Creates a new RedirectResponse instance
+     * Creates a new RedirectResponse instance.
+     *
+     * @param $location
+     *   The location to redirect.
      */
     public function __construct($location)
     {
