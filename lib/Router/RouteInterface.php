@@ -31,4 +31,11 @@ interface RouteInterface
      * @return mixed
      */
     public function handle(Request $request);
+
+    /**
+     * Returns the template path.
+     *
+     * @return string
+     */
+    public function getTemplatePath();
 }

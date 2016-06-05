@@ -11,6 +11,7 @@ use Smatyas\Mfw\Application;
 use Smatyas\Mfw\Router\Route;
 
 $app = new Application();
+$app->setAppBasePath(__DIR__ . '/../src');
 
 $route = new Route();
 $route->setPath('/test');

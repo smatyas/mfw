@@ -149,4 +149,25 @@ class Route implements RouteInterface
 
         return $controller->$action($request);
     }
+
+    /**
+     * Returns the template file name.
+     * @return string
+     */
+    protected function getTemplateFileName()
+    {
+        return $this->controllerAction . '.html.tpl';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return sprintf(
+            '%s/%s',
+            end(explode('\\', $this->getController())),
+            $this->getTemplateFileName()
+        );
+    }
 }

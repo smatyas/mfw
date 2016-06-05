@@ -27,7 +27,7 @@ interface RouterInterface
      * Finds the first route that matches the request.
      *
      * @param Request $request
-     * @return Route
+     * @return RouteInterface
      */
     public function match(Request $request);
 }

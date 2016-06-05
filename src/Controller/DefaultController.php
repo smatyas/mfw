@@ -18,6 +18,12 @@ class DefaultController extends AbstractController
 {
     public function indexAction()
     {
-        phpinfo();
+        return [
+            'title' => 'Main page',
+            'controller' => __METHOD__,
+            'hostname' => gethostname(),
+            'var1' => date(DATE_ISO8601),
+            'var2' => rand(1, 10000),
+        ];
     }
 }
