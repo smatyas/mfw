@@ -21,5 +21,5 @@ interface TemplatingInterface
      * @param $parameters
      * @return string
      */
-    public function render($template, $parameters);
+    public function render($template, $parameters = []);
 }

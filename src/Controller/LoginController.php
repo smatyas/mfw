@@ -31,7 +31,8 @@ class LoginController extends AbstractController
         }
         return [
             'errors' => $errors,
-            'title' => 'Login',
+            'header' => $this->get('templating')->render('header.html.tpl', ['title' => 'Login']),
+            'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }
 

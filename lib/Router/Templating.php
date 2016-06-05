@@ -60,7 +60,7 @@ class Templating implements TemplatingInterface
     /**
      * {@inheritdoc}
      */
-    public function render($template, $parameters)
+    public function render($template, $parameters = [])
     {
         $templatePath = $this->getTemplatePath($template);
         if (!is_readable(realpath($templatePath))) {
