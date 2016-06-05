@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Http;
 
-
 class Response
 {
     /**

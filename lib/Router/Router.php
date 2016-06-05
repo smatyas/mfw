@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Router;
 
-
 use Smatyas\Mfw\Http\Request;
 
 class Router implements RouterInterface

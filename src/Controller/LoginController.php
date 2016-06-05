@@ -11,7 +11,6 @@
 
 namespace Smatyas\MfwApp\Controller;
 
-
 use Gregwar\Captcha\CaptchaBuilder;
 use Smatyas\Mfw\Controller\AbstractController;
 use Smatyas\Mfw\Http\RedirectResponse;

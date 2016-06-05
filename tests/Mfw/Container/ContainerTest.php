@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Tests\Container;
 
-
 use Smatyas\Mfw\Container\Container;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase

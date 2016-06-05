@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Http\Exception;
 
-
 class HttpException extends \Exception
 {
     /**

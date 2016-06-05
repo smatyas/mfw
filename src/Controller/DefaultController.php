@@ -11,7 +11,6 @@
 
 namespace Smatyas\MfwApp\Controller;
 
-
 use Smatyas\Mfw\Controller\AbstractController;
 
 class DefaultController extends AbstractController

@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Router;
 
-
 class Templating implements TemplatingInterface
 {
     /**

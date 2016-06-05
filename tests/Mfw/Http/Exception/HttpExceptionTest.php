@@ -11,7 +11,6 @@
 
 namespace Smatyas\Mfw\Tests\Http\Exception;
 
-
 use Smatyas\Mfw\Http\Exception\HttpException;
 
 class HttpExceptionTest extends \PHPUnit_Framework_TestCase
