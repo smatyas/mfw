@@ -8,6 +8,13 @@ if (!file_exists($autoloader)) {
 require $autoloader;
 
 use Smatyas\Mfw\Application;
+use Smatyas\Mfw\Router\Route;
 
 $app = new Application();
+
+$route = new Route();
+$route->setPath('/test');
+$route->setController('Smatyas\\MfwApp\\Controller\\DefaultController');
+$app->getRouter()->addRoute($route);
+
 $app->run();
