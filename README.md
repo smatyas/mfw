@@ -1,6 +1,8 @@
 MFW - a simple microframework
 =============================
 
+[![Build Status](https://travis-ci.org/smatyas/mfw.svg?branch=master)](https://travis-ci.org/smatyas/mfw)
+
 Development
 ===========
 
