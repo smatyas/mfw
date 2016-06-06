@@ -113,4 +113,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->container->has('test1'));
         $this->assertFalse($this->container->has('test2'));
     }
+
+    /**
+     * Tests that trying to add an already existing service results in the correct exception.
+     *
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp /^Service key already exists:/
+     */
+    public function testAddException()
+    {
+        $testService = new \stdClass();
+        $this->container->add('test', $testService);
+        $this->container->add('test', $testService);
+    }
 }
