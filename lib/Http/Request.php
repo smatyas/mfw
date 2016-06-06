@@ -14,7 +14,7 @@ namespace Smatyas\Mfw\Http;
 class Request
 {
     /**
-     * The request URI uri.
+     * The request URI.
      *
      * @var string
      */
@@ -78,6 +78,8 @@ class Request
     }
 
     /**
+     * Gets the HTTP method.
+     *
      * @return string
      */
     public function getMethod()
@@ -86,6 +88,8 @@ class Request
     }
 
     /**
+     * Sets the HTTP method.
+     *
      * @param string $method
      */
     public function setMethod($method)
@@ -94,6 +98,8 @@ class Request
     }
 
     /**
+     * Gets the GET parameters.
+     *
      * @return array
      */
     public function getGetParameters()
@@ -102,6 +108,8 @@ class Request
     }
 
     /**
+     * Sets the GET parameters.
+     *
      * @param array $getParameters
      */
     public function setGetParameters($getParameters)
@@ -109,6 +117,13 @@ class Request
         $this->getParameters = $getParameters;
     }
 
+    /**
+     * Gets the GET parameter with the requested name, or the default value if the parameter is not set.
+     *
+     * @param $parameter
+     * @param null $default
+     * @return mixed|null
+     */
     public function getGetParameter($parameter, $default = null)
     {
         $parameters = $this->getGetParameters();
@@ -117,6 +132,8 @@ class Request
     }
 
     /**
+     * Gets the POST parameters.
+     *
      * @return array
      */
     public function getPostParameters()
@@ -125,6 +142,8 @@ class Request
     }
 
     /**
+     * Sets the POST parameters.
+     *
      * @param array $postParameters
      */
     public function setPostParameters($postParameters)
@@ -132,10 +151,17 @@ class Request
         $this->postParameters = $postParameters;
     }
 
+    /**
+     * Gets the POST parameter with the requested name, or the default value if the parameter is not set.
+     *
+     * @param $parameter
+     * @param null $default
+     * @return mixed|null
+     */
     public function getPostParameter($parameter, $default = null)
     {
         $parameters = $this->getPostParameters();
-        
+
         return isset($parameters[$parameter]) ? $parameters[$parameter] : $default;
     }
 }
