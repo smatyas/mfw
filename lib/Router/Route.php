@@ -126,7 +126,10 @@ class Route implements RouteInterface
         }
         $controllerInstance = new $controller();
         if (!($controllerInstance instanceof ControllerInterface)) {
-            throw new \RuntimeException();
+            throw new \RuntimeException(sprintf(
+                'The "%s" controller must implement the ControllerInterface interface.',
+                $controller
+            ));
         }
 
         return $controllerInstance;
@@ -154,6 +157,7 @@ class Route implements RouteInterface
 
     /**
      * Returns the template file name.
+     *
      * @return string
      */
     protected function getTemplateFileName()
