@@ -2,6 +2,7 @@ MFW - a simple microframework
 =============================
 
 [![Build Status](https://travis-ci.org/smatyas/mfw.svg?branch=master)](https://travis-ci.org/smatyas/mfw)
+[![Coverage Status](https://coveralls.io/repos/github/smatyas/mfw/badge.svg?branch=master)](https://coveralls.io/github/smatyas/mfw?branch=master)
 
 Development
 ===========
@@ -53,6 +54,8 @@ Development
     ```
     vendor/bin/phpunit
     ```
+    
+    The code coverage report is accessible at port `8100` on your host address, i.e. http://192.168.99.100:8100/
 
 9. Test the code style:
 

@@ -5,12 +5,16 @@ services:
     build: ./web-lb
     ports:
       - 8000:80
+      - 8100:81
     links:
       - web-1
       - web-2
 
   web-1:
     build: ./web-1
+    expose:
+      - 80
+      - 81
     volumes_from:
       - content
     links:
@@ -20,6 +24,9 @@ services:
 
   web-2:
     build: ./web-2
+    expose:
+      - 80
+      - 81
     volumes_from:
       - content
     links:
