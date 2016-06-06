@@ -16,14 +16,21 @@ use Smatyas\Mfw\Http\Request;
 interface RouterInterface
 {
     /**
-     * Adds a router to the router.
+     * Returns the routes.
      *
-     * @param Route $route
+     * @return mixed
      */
-    public function addRoute(Route $route);
+    public function getRoutes();
+    
+    /**
+     * Adds a route to the router.
+     *
+     * @param RouteInterface $route
+     */
+    public function addRoute(RouteInterface $route);
 
     /**
-     * Finds the first route that matches the request.
+     * Finds the first route that matches the given Request.
      *
      * @param Request $request
      * @return RouteInterface

@@ -20,20 +20,20 @@ class Router implements RouterInterface
      *
      * @var array
      */
-    protected $routes;
+    protected $routes = [];
 
     /**
-     * Creates a Router instance.
+     * {@inheritdoc}
      */
-    public function __construct()
+    public function getRoutes()
     {
-        $this->routes = [];
+        return $this->routes;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addRoute(Route $route)
+    public function addRoute(RouteInterface $route)
     {
         $this->routes[] = $route;
     }
@@ -43,7 +43,7 @@ class Router implements RouterInterface
      */
     public function match(Request $request)
     {
-        foreach ($this->routes as $route) {
+        foreach ($this->getRoutes() as $route) {
             /** @var $route RouteInterface */
             if ($route->matches($request)) {
                 return $route;
