@@ -170,9 +170,10 @@ class Route implements RouteInterface
      */
     public function getTemplatePath()
     {
+        $controllerNamespaceParts = explode('\\', $this->getController());
         return sprintf(
             '%s/%s',
-            end(explode('\\', $this->getController())),
+            end($controllerNamespaceParts),
             $this->getTemplateFileName()
         );
     }

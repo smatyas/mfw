@@ -139,4 +139,33 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
         $routeMock->handle($request, $container);
     }
+
+    /**
+     * Tests that the getTemplatePath method works as expected.
+     *
+     * @param $controller
+     * @param $action
+     * @param $expectedTemplate
+     *
+     * @dataProvider getTemplatePathDataProvider
+     */
+    public function testGetTemplatePath($controller, $action, $expectedTemplate)
+    {
+        $route = new Route();
+        $route->setController($controller);
+        $route->setControllerAction($action);
+        $this->assertSame($expectedTemplate, $route->getTemplatePath());
+    }
+
+    /**
+     * Provides test data for the testGetTemplatePath test.
+     */
+    public function getTemplatePathDataProvider()
+    {
+        return [
+            ['\\Namespace\\ClassName', 'index', 'ClassName/index.html.tpl'],
+            ['\\Namespace\\Path\\SubPath\\SubSubPath\\ClassName2', 'index2', 'ClassName2/index2.html.tpl'],
+            ['\\ClassName3', 'list', 'ClassName3/list.html.tpl'],
+        ];
+    }
 }
