@@ -80,7 +80,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
      * @param $controller
      *
      * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /^The ".*" controller must implement the ControllerInterface interface.$/
+     * @expectedExceptionMessageRegExp /^The ".*" controller must implement the ControllerInterface interface\.$/
      *
      * @dataProvider handleControllerInterfaceCheckDataProvider
      */
@@ -105,5 +105,38 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             ['\\stdClass'],
             ['\\DateTime'],
         ];
+    }
+
+    /**
+     * Tests that the Container is set on the called controller and that the correct action method is called.
+     */
+    public function testContainerSetOnControllerAndActionIsCalled()
+    {
+        $container = new Container();
+
+        $request = new Request();
+        $request->setUri('/test');
+        $request->setMethod('GET');
+
+        // Mocking the test controller to check the expectations.
+        $controllerMock = $this->getMockBuilder('Smatyas\\Mfw\\Tests\\Router\\TestController')
+            ->setMethods(['setContainer', 'indexAction'])
+            ->getMock();
+        $controllerMock->expects($this->once())
+            ->method('setContainer')
+            ->with($this->identicalTo($container));
+        $controllerMock->expects($this->once())
+            ->method('indexAction')
+            ->with($this->identicalTo($request));
+
+        // Mocking the Route instance to return the the mocked controller.
+        $routeMock = $this->getMockBuilder('Smatyas\\Mfw\\Router\\Route')
+            ->setMethods(['getControllerInstance'])
+            ->getMock();
+        $routeMock->method('getControllerInstance')
+            ->willReturn($controllerMock);
+        $routeMock->setController($controllerMock);
+
+        $routeMock->handle($request, $container);
     }
 }
