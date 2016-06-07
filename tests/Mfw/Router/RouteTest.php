@@ -135,9 +135,28 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $routeMock->method('getControllerInstance')
             ->willReturn($controllerMock);
-        $routeMock->setController($controllerMock);
 
         $routeMock->handle($request, $container);
+    }
+
+    /**
+     * Tests that the getControllerInstance method really returns a controller instance
+     * by checking the result of the controller action.
+     */
+    public function testGetControllerInstanceReturnsControllerInterface()
+    {
+        $container = new Container();
+        $request = new Request();
+        $request->setUri('/test');
+        $request->setMethod('GET');
+
+        $route = new Route();
+        $route->setController('Smatyas\\Mfw\\Tests\\Router\\TestController');
+
+        $this->assertSame(
+            ['method' => 'Smatyas\Mfw\Tests\Router\TestController::indexAction'],
+            $route->handle($request, $container)
+        );
     }
 
     /**

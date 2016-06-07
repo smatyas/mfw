@@ -33,5 +33,6 @@ class TestController implements ControllerInterface
 
     public function indexAction()
     {
+        return ['method' => __METHOD__];
     }
 }
