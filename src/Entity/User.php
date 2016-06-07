@@ -15,7 +15,7 @@ class User
 {
     /**
      * The user ID.
-     * 
+     *
      * @var int
      */
     protected $id;
