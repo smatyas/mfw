@@ -16,6 +16,9 @@ use Smatyas\Mfw\Controller\AbstractController;
 use Smatyas\Mfw\Http\RedirectResponse;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
+use Smatyas\Mfw\Orm\Manager;
+use Smatyas\MfwApp\Entity\User;
+use Smatyas\MfwApp\Entity\UserRepository;
 
 class LoginController extends AbstractController
 {
@@ -46,7 +49,29 @@ class LoginController extends AbstractController
             // redirect to the login page
             return new RedirectResponse('/login');
         }
-        var_dump($_POST);
+
+        // Checking user credentials.
+        /** @var Manager $om */
+        $om = $this->get('orm.manager');
+        /** @var UserRepository $repo */
+        $repo = $om->getRepository(User::class);
+        $user = $repo->findByUsername($request->getPostParameter('username'));
+        if (null !== $user && $user->matchPassword($request->getPostParameter('password'))) {
+            // User successfully authenticated.
+            $_SESSION['user'] = [
+                'id' => $user->getId(),
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles(),
+            ];
+
+            // redirect to the main page
+            return new RedirectResponse('/');
+        } else {
+            $_SESSION['flashes']['error'][] = 'Invalid username or password.';
+
+            // redirect to the login page
+            return new RedirectResponse('/login');
+        }
     }
 
     public function captchaAction()
@@ -70,5 +95,12 @@ class LoginController extends AbstractController
         }
 
         return $captchaBuilder;
+    }
+
+    public function logoutAction()
+    {
+        session_destroy();
+        
+        return new RedirectResponse('/');
     }
 }

@@ -16,6 +16,7 @@ use Smatyas\Mfw\Http\Exception\HttpException;
 use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
+use Smatyas\Mfw\Orm\Manager;
 use Smatyas\Mfw\Router\Route;
 use Smatyas\Mfw\Router\RouteInterface;
 use Smatyas\Mfw\Router\Router;
@@ -61,6 +62,9 @@ class Application
         $this->container = new Container();
         $this->getContainer()->add('routing', $this->getConfig()['routing']);
         $this->getContainer()->add('templating', $this->getConfig()['templating']);
+        if (isset($this->getConfig()['orm.manager'])) {
+            $this->getContainer()->add('orm.manager', $this->getConfig()['orm.manager']);
+        }
     }
 
     /**
@@ -87,6 +91,22 @@ class Application
             throw new \RuntimeException('The "templating" service must implement the TemplatingInterface');
         } else {
             $config['templating'] = new Templating($config['app_base_path']);
+        }
+
+        if (isset($config['orm.config'])) {
+            if (!isset($config['orm.config']['type'])) {
+                throw new \RuntimeException('The "orm.config.type" must be set.');
+            }
+
+            switch ($config['orm.config']['type']) {
+                case 'mfw':
+                    $config['orm.manager'] = new Manager($config['orm.config']);
+                    break;
+
+                default:
+                    throw new \RuntimeException('Unknown orm type: ' . $config['orm']['type']);
+                    break;
+            }
         }
 
         $this->config = $config;

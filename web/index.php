@@ -11,10 +11,21 @@ use Smatyas\Mfw\Application;
 
 $applicationConfig = [
     'app_base_path' => __DIR__ . '/../src',
+    'orm.config' => [
+        'type' => 'mfw',
+        'host' => 'db',
+        'database' => 'mfw',
+        'username' => 'mfw',
+        'password' => 'mfw',
+        'mapping' => [
+            'user' => 'Smatyas\\MfwApp\\Entity\\User',
+        ],
+    ],
 ];
 $app = new Application($applicationConfig);
 $app->addRoute('/', 'Smatyas\\MfwApp\\Controller\\DefaultController');
 $app->addRoute('/login', 'Smatyas\\MfwApp\\Controller\\LoginController');
 $app->addRoute('/login/captcha', 'Smatyas\\MfwApp\\Controller\\LoginController', 'captcha');
 $app->addRoute('/login/check', 'Smatyas\\MfwApp\\Controller\\LoginController', 'check', 'POST');
+$app->addRoute('/logout', 'Smatyas\\MfwApp\\Controller\\LoginController', 'logout');
 $app->run();

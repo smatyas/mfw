@@ -45,7 +45,15 @@ Development
    
 6. Load the fixtures to fill the DB with some initial data:
 
-    TODO
+    ```
+    ./scripts/init_db.sh
+    ```
+    
+    It imports a db dump to the database.
+    The following users will be created (username / password - role):
+      - user1 / user1 - PAGE_1
+      - user2 / user2 - PAGE_2
+      - user3 / user3 - PAGE_1 and PAGE_2
     
 7. The site is now available at the port `8000` on your docker host address, i.e.: http://192.168.99.100:8000/
 
