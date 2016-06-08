@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Smatyas\Mfw\Router;
+namespace Smatyas\Mfw\Templating;
 
 interface TemplatingInterface
 {

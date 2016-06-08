@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Smatyas\Mfw\Tests\Router;
+namespace Smatyas\Mfw\Tests\Templating;
 
-use Smatyas\Mfw\Router\Templating;
+use Smatyas\Mfw\Templating\Templating;
 
 class TemplatingTest extends \PHPUnit_Framework_TestCase
 {

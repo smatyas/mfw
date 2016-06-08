@@ -21,8 +21,8 @@ use Smatyas\Mfw\Router\Route;
 use Smatyas\Mfw\Router\RouteInterface;
 use Smatyas\Mfw\Router\Router;
 use Smatyas\Mfw\Router\RouterInterface;
-use Smatyas\Mfw\Router\Templating;
-use Smatyas\Mfw\Router\TemplatingInterface;
+use Smatyas\Mfw\Templating\Templating;
+use Smatyas\Mfw\Templating\TemplatingInterface;
 
 /**
  * An mfw application.
