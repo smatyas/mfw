@@ -32,7 +32,7 @@ class LoginController extends BaseController
         }
         return [
             'errors' => $errors,
-            'header' => $this->getHeaderContent($request),
+            'header' => $this->getHeaderContent($request, 'Login'),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }

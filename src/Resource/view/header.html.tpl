@@ -34,8 +34,8 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="{{$user1_link_class}}"><a href="/user1">User 1</a></li>
-                <li class="{{$user2_link_class}}"><a href="/user2">User 2</a></li>
+                <li class="{{$page1_link_class}}"><a href="/page1">Page 1</a></li>
+                <li class="{{$page2_link_class}}"><a href="/page2">Page 2</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

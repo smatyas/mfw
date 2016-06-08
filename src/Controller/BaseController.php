@@ -16,7 +16,7 @@ use Smatyas\Mfw\Http\Request;
 
 abstract class BaseController extends AbstractController
 {
-    public function getHeaderContent(Request $request)
+    public function getHeaderContent(Request $request, $title)
     {
         $user1LinkClass = $user2LinkClass = '';
         switch ($request->getUri()) {
@@ -40,7 +40,7 @@ abstract class BaseController extends AbstractController
         $headerContent = $this->get('templating')->render(
             'header.html.tpl',
             [
-                'title' => 'Main page',
+                'title' => $title,
                 'user1_link_class' => $user1LinkClass,
                 'user2_link_class' => $user2LinkClass,
                 'username' => $username,

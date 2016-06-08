@@ -167,8 +167,9 @@ class Application
      * @param $controller
      * @param string $action
      * @param string $method
+     * @param array $roles
      */
-    public function addRoute($path, $controller, $action = 'index', $method = 'GET')
+    public function addRoute($path, $controller, $action = 'index', $method = 'GET', $roles = [])
     {
         $route = new Route();
         $route->setPath($path);

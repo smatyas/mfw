@@ -13,17 +13,23 @@ namespace Smatyas\MfwApp\Controller;
 
 use Smatyas\Mfw\Http\Request;
 
-class DefaultController extends BaseController
+class SecuredPageController extends BaseController
 {
-    public function indexAction(Request $request)
+    public function page1Action(Request $request)
     {
         return [
-            'header' => $this->getHeaderContent($request, 'Main page'),
-            'var1' => date(DATE_ISO8601),
-            'var2' => rand(1, 10000),
+            'header' => $this->getHeaderContent($request, 'Secured page 1'),
             'controller' => __METHOD__,
-            'hostname' => gethostname(),
-            'session_id' => session_id(),
+            'session_data' => json_encode($_SESSION),
+            'footer' => $this->get('templating')->render('footer.html.tpl'),
+        ];
+    }
+
+    public function page2Action(Request $request)
+    {
+        return [
+            'header' => $this->getHeaderContent($request, 'Secured page 2'),
+            'controller' => __METHOD__,
             'session_data' => json_encode($_SESSION),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];

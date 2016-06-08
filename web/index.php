@@ -28,4 +28,6 @@ $app->addRoute('/login', 'Smatyas\\MfwApp\\Controller\\LoginController');
 $app->addRoute('/login/captcha', 'Smatyas\\MfwApp\\Controller\\LoginController', 'captcha');
 $app->addRoute('/login/check', 'Smatyas\\MfwApp\\Controller\\LoginController', 'check', 'POST');
 $app->addRoute('/logout', 'Smatyas\\MfwApp\\Controller\\LoginController', 'logout');
+$app->addRoute('/page1', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page1', 'GET', ['PAGE_1']);
+$app->addRoute('/page2', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page2', 'GET', ['PAGE_2']);
 $app->run();
