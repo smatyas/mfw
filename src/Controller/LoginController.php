@@ -12,7 +12,6 @@
 namespace Smatyas\MfwApp\Controller;
 
 use Gregwar\Captcha\CaptchaBuilder;
-use Smatyas\Mfw\Controller\AbstractController;
 use Smatyas\Mfw\Http\RedirectResponse;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
@@ -20,9 +19,9 @@ use Smatyas\Mfw\Orm\Manager;
 use Smatyas\MfwApp\Entity\User;
 use Smatyas\MfwApp\Entity\UserRepository;
 
-class LoginController extends AbstractController
+class LoginController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $errors = '';
         if (isset($_SESSION['flashes']['error'])) {
@@ -33,7 +32,7 @@ class LoginController extends AbstractController
         }
         return [
             'errors' => $errors,
-            'header' => $this->get('templating')->render('header.html.tpl', ['title' => 'Login']),
+            'header' => $this->getHeaderContent($request),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }
@@ -100,7 +99,7 @@ class LoginController extends AbstractController
     public function logoutAction()
     {
         session_destroy();
-        
+
         return new RedirectResponse('/');
     }
 }

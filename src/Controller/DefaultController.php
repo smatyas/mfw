@@ -11,14 +11,14 @@
 
 namespace Smatyas\MfwApp\Controller;
 
-use Smatyas\Mfw\Controller\AbstractController;
+use Smatyas\Mfw\Http\Request;
 
-class DefaultController extends AbstractController
+class DefaultController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         return [
-            'header' => $this->get('templating')->render('header.html.tpl', ['title' => 'Main page']),
+            'header' => $this->getHeaderContent($request),
             'var1' => date(DATE_ISO8601),
             'var2' => rand(1, 10000),
             'controller' => __METHOD__,
