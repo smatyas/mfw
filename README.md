@@ -1,11 +1,32 @@
-MFW - a simple microframework
-=============================
+MFW - a simple PHP microframework
+=================================
 
 [![Build Status](https://travis-ci.org/smatyas/mfw.svg?branch=master)](https://travis-ci.org/smatyas/mfw)
 [![Coverage Status](https://coveralls.io/repos/github/smatyas/mfw/badge.svg?branch=master)](https://coveralls.io/github/smatyas/mfw?branch=master)
 
-Development
-===========
+This repository contains a minimal MVC PHP framework and an POC application built on top of it.
+The framework code itself is under the `lib` directory.
+The application code is under the `src` directory.
+
+The framework consists of the following custom main parts:
+  - container
+  - custom error handler (disabled by default, you can enable it in `web/index.php`)
+  - ORM
+  - routing
+  - security
+  - templating
+  
+The main entry point of the POC application is the `web/index.php`.
+The framework configuration and the application setup in in this file.
+
+This repository contains a docker environment setup for testing purposes, 
+so you can easily try out and play around with the app.
+The requests will hit a load balancer that dispatches them to two workers in round-robin.
+Both workers are connected to the same memcached and mysql instance. 
+The session handling is transparent (using memcached).
+
+Running and testing
+===================
 
 1. Clone the repository
 2. Build the development environment:
@@ -70,3 +91,15 @@ Development
     ```
     vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
     ```
+
+10. Checking sent mails (if the custom error handler is enabled in `web/index.php`)
+
+    Due to mail sending issues from docker, emails are actually not sent. 
+    The php is configured to use a custom mail sending script: `docker/php-fpm/phpsendmail`
+    The script writes all mail into `/tmp/phpsendmail.log`, so you can easily monitor them using the following command:
+    
+    ```
+    tail -f /tmp/phpsendmail.log
+    ```
+    
+    Remember that there are 2 PHP workers running, so you might want to monitor both of them.

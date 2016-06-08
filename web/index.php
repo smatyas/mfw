@@ -28,11 +28,15 @@ $applicationConfig = [
             '/page2' => ['PAGE_2'],
         ],
     ],
-    'error_handler.config' => [
-        'type' => 'email',
-        'to' => 'ops@example.com',
-    ],
+    
+// Enable the email error handler here by uncommenting the lines below.
+//
+//    'error_handler.config' => [
+//        'type' => 'email',
+//        'to' => 'ops@example.com',
+//    ],
 ];
+
 $app = new Application($applicationConfig);
 $app->addRoute('/', 'Smatyas\\MfwApp\\Controller\\DefaultController');
 $app->addRoute('/login', 'Smatyas\\MfwApp\\Controller\\LoginController');
