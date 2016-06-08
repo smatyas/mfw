@@ -38,6 +38,8 @@ class Manager
     }
 
     /**
+     * Gets the configuration.
+     *
      * @return array
      */
     public function getConfig()
@@ -46,6 +48,8 @@ class Manager
     }
 
     /**
+     * Validates and sets the configuration.
+     *
      * @param array $config
      */
     public function setConfig($config)
@@ -76,7 +80,7 @@ class Manager
     public function getDb()
     {
         if (null === $this->db) {
-            $this->db = new \PDO(
+            $this->db = $this->createPdo(
                 sprintf('mysql:dbname=%s;host=%s', $this->config['database'], $this->config['host']),
                 $this->config['username'],
                 $this->config['password']
@@ -84,6 +88,21 @@ class Manager
         }
 
         return $this->db;
+    }
+
+    /**
+     * Creates a new PDO instance.
+     *
+     * @codeCoverageIgnore
+     * @param $dsn
+     * @param $username
+     * @param $password
+     * @param array $options
+     * @return \PDO
+     */
+    protected function createPdo($dsn, $username, $password, $options = [])
+    {
+        return new \PDO($dsn, $username, $password, $options);
     }
 
     /**
