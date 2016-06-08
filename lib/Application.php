@@ -30,13 +30,6 @@ use Smatyas\Mfw\Router\TemplatingInterface;
 class Application
 {
     /**
-     * The base path of the application.
-     *
-     * @var string
-     */
-    protected $appBasePath;
-
-    /**
      * The application configuration.
      *
      * @var array
@@ -58,7 +51,6 @@ class Application
     public function __construct($config)
     {
         $this->validateAndSetConfig($config);
-        $this->setAppBasePath($config['app_base_path']);
         $this->container = new Container();
         $this->getContainer()->add('routing', $this->getConfig()['routing']);
         $this->getContainer()->add('templating', $this->getConfig()['templating']);
@@ -74,8 +66,7 @@ class Application
      */
     protected function validateAndSetConfig($config)
     {
-        $mandatoryParameters = ['app_base_path'];
-        foreach ($mandatoryParameters as $mandatoryParameter) {
+        foreach (['app_base_path'] as $mandatoryParameter) {
             if (!array_key_exists($mandatoryParameter, $config)) {
                 throw new \RuntimeException('Mandatory application config parameter missing: ' . $mandatoryParameter);
             }
@@ -135,21 +126,7 @@ class Application
      */
     public function getAppBasePath()
     {
-        if (null === $this->appBasePath) {
-            $this->setAppBasePath(__DIR__);
-        }
-
-        return $this->appBasePath;
-    }
-
-    /**
-     * Sets the application base path.
-     *
-     * @param string $appBasePath
-     */
-    public function setAppBasePath($appBasePath)
-    {
-        $this->appBasePath = $appBasePath;
+        return $this->getConfig()['app_base_path'];
     }
 
     /**
@@ -215,6 +192,7 @@ class Application
         if (null === $route) {
             throw new NotFoundHttpException();
         }
+        // TODO: check security here
         return $route;
     }
 
