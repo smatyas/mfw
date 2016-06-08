@@ -48,6 +48,8 @@ class LoginController extends BaseController
             // redirect to the login page
             return new RedirectResponse('/login');
         }
+        // reset the captcha
+        unset($_SESSION['captcha_phrase']);
 
         // Checking user credentials.
         /** @var Manager $om */
@@ -57,11 +59,7 @@ class LoginController extends BaseController
         $user = $repo->findByUsername($request->getPostParameter('username'));
         if (null !== $user && $user->matchPassword($request->getPostParameter('password'))) {
             // User successfully authenticated.
-            $_SESSION['user'] = [
-                'id' => $user->getId(),
-                'username' => $user->getUsername(),
-                'roles' => $user->getRoles(),
-            ];
+            $this->get('security.checker')->setUser($user);
 
             // redirect to the main page
             return new RedirectResponse('/');
@@ -98,7 +96,7 @@ class LoginController extends BaseController
 
     public function logoutAction()
     {
-        session_destroy();
+        $this->get('security.checker')->logoutUser();
 
         return new RedirectResponse('/');
     }

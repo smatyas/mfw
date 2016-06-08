@@ -24,7 +24,7 @@ class DefaultController extends BaseController
             'controller' => __METHOD__,
             'hostname' => gethostname(),
             'session_id' => session_id(),
-            'session_data' => json_encode($_SESSION),
+            'session_data' => print_r($_SESSION, true),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }

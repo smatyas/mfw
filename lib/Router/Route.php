@@ -46,7 +46,7 @@ class Route implements RouteInterface
     protected $controllerAction = 'index';
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPath()
     {

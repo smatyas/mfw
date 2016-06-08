@@ -13,6 +13,7 @@ namespace Smatyas\MfwApp\Controller;
 
 use Smatyas\Mfw\Controller\AbstractController;
 use Smatyas\Mfw\Http\Request;
+use Smatyas\Mfw\Security\UserInterface;
 
 abstract class BaseController extends AbstractController
 {
@@ -23,13 +24,16 @@ abstract class BaseController extends AbstractController
             case '/user1':
                 $user1LinkClass = 'active';
                 break;
-            
+
             case '/user2':
                 $user2LinkClass = 'active';
                 break;
         }
-        if (isset($_SESSION['user'])) {
-            $username = $_SESSION['user']['username'];
+
+        /** @var UserInterface $user */
+        $user = $this->get('security.checker')->getUser();
+        if ($user) {
+            $username = $user->getUsername();
             $submenuPath = '/logout';
             $submenuTitle = 'Log out';
         } else {

@@ -14,6 +14,9 @@ namespace Smatyas\Mfw;
 use Smatyas\Mfw\Container\Container;
 use Smatyas\Mfw\Http\Exception\HttpException;
 use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
+use Smatyas\Mfw\Http\Exception\RedirectException;
+use Smatyas\Mfw\Http\Exception\ResponseException;
+use Smatyas\Mfw\Http\Exception\ResponseHttpException;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
 use Smatyas\Mfw\Orm\Manager;
@@ -21,6 +24,8 @@ use Smatyas\Mfw\Router\Route;
 use Smatyas\Mfw\Router\RouteInterface;
 use Smatyas\Mfw\Router\Router;
 use Smatyas\Mfw\Router\RouterInterface;
+use Smatyas\Mfw\Security\SecurityChecker;
+use Smatyas\Mfw\Security\SecurityCheckerInterface;
 use Smatyas\Mfw\Templating\Templating;
 use Smatyas\Mfw\Templating\TemplatingInterface;
 
@@ -54,6 +59,7 @@ class Application
         $this->container = new Container();
         $this->getContainer()->add('routing', $this->getConfig()['routing']);
         $this->getContainer()->add('templating', $this->getConfig()['templating']);
+        $this->getContainer()->add('security.checker', $this->getConfig()['security.checker']);
         if (isset($this->getConfig()['orm.manager'])) {
             $this->getContainer()->add('orm.manager', $this->getConfig()['orm.manager']);
         }
@@ -82,6 +88,15 @@ class Application
             throw new \RuntimeException('The "templating" service must implement the TemplatingInterface');
         } else {
             $config['templating'] = new Templating($config['app_base_path']);
+        }
+
+        if (isset($config['security.checker']) && !($config['security.checker'] instanceof SecurityCheckerInterface)) {
+            throw new \RuntimeException('The "security.checker" service must implement the SecurityCheckerInterface');
+        } else {
+            if (!isset($config['security.config'])) {
+                throw new \RuntimeException('The "security.config" application parameter is missing.');
+            }
+            $config['security.checker'] = new SecurityChecker($config['security.config']);
         }
 
         if (isset($config['orm.config'])) {
@@ -113,6 +128,11 @@ class Application
             $request = Request::createFromGlobals();
             $route = $this->getRoute($request);
             $response = $this->createResponse($route, $request);
+        } catch (ResponseHttpException $e) {
+            if (!$response = $e->getResponse()) {
+                // Throw it further if the exception does not contain a response.
+                throw $e;
+            }
         } catch (HttpException $e) {
             $response = new Response($e->getMessage(), $e->getResponseCode());
         }
@@ -167,9 +187,8 @@ class Application
      * @param $controller
      * @param string $action
      * @param string $method
-     * @param array $roles
      */
-    public function addRoute($path, $controller, $action = 'index', $method = 'GET', $roles = [])
+    public function addRoute($path, $controller, $action = 'index', $method = 'GET')
     {
         $route = new Route();
         $route->setPath($path);
@@ -185,7 +204,6 @@ class Application
      * @param Request $request
      * @return RouteInterface
      * @throws NotFoundHttpException
-     *   When there were no matched route.
      */
     protected function getRoute(Request $request)
     {
@@ -193,7 +211,9 @@ class Application
         if (null === $route) {
             throw new NotFoundHttpException();
         }
-        // TODO: check security here
+
+        $this->get('security.checker')->checkRoute($route);
+
         return $route;
     }
 

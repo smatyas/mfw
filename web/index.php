@@ -21,6 +21,13 @@ $applicationConfig = [
             'user' => 'Smatyas\\MfwApp\\Entity\\User',
         ],
     ],
+    'security.config' => [
+        'login_path' => '/login',
+        'paths' => [
+            '/page1' => ['PAGE_1'],
+            '/page2' => ['PAGE_2'],
+        ],
+    ]
 ];
 $app = new Application($applicationConfig);
 $app->addRoute('/', 'Smatyas\\MfwApp\\Controller\\DefaultController');
@@ -28,6 +35,6 @@ $app->addRoute('/login', 'Smatyas\\MfwApp\\Controller\\LoginController');
 $app->addRoute('/login/captcha', 'Smatyas\\MfwApp\\Controller\\LoginController', 'captcha');
 $app->addRoute('/login/check', 'Smatyas\\MfwApp\\Controller\\LoginController', 'check', 'POST');
 $app->addRoute('/logout', 'Smatyas\\MfwApp\\Controller\\LoginController', 'logout');
-$app->addRoute('/page1', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page1', 'GET', ['PAGE_1']);
-$app->addRoute('/page2', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page2', 'GET', ['PAGE_2']);
+$app->addRoute('/page1', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page1');
+$app->addRoute('/page2', 'Smatyas\\MfwApp\\Controller\\SecuredPageController', 'page2');
 $app->run();

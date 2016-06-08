@@ -39,4 +39,11 @@ interface RouteInterface
      * @return string
      */
     public function getTemplatePath();
+
+    /**
+     * Return the route path.
+     *
+     * @return string
+     */
+    public function getPath();
 }

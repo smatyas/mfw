@@ -11,7 +11,9 @@
 
 namespace Smatyas\MfwApp\Entity;
 
-class User
+use Smatyas\Mfw\Security\UserInterface;
+
+class User implements UserInterface
 {
     /**
      * The user ID.
@@ -58,7 +60,7 @@ class User
     }
     
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getUsername()
     {

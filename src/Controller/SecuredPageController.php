@@ -20,7 +20,7 @@ class SecuredPageController extends BaseController
         return [
             'header' => $this->getHeaderContent($request, 'Secured page 1'),
             'controller' => __METHOD__,
-            'session_data' => json_encode($_SESSION),
+            'session_data' => print_r($_SESSION, true),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }
@@ -30,7 +30,7 @@ class SecuredPageController extends BaseController
         return [
             'header' => $this->getHeaderContent($request, 'Secured page 2'),
             'controller' => __METHOD__,
-            'session_data' => json_encode($_SESSION),
+            'session_data' => print_r($_SESSION, true),
             'footer' => $this->get('templating')->render('footer.html.tpl'),
         ];
     }
