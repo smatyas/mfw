@@ -27,7 +27,11 @@ $applicationConfig = [
             '/page1' => ['PAGE_1'],
             '/page2' => ['PAGE_2'],
         ],
-    ]
+    ],
+    'error_handler.config' => [
+        'type' => 'email',
+        'to' => 'ops@example.com',
+    ],
 ];
 $app = new Application($applicationConfig);
 $app->addRoute('/', 'Smatyas\\MfwApp\\Controller\\DefaultController');

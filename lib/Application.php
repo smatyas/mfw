@@ -12,10 +12,9 @@
 namespace Smatyas\Mfw;
 
 use Smatyas\Mfw\Container\Container;
+use Smatyas\Mfw\ErrorHandler\EmailErrorHandler;
 use Smatyas\Mfw\Http\Exception\HttpException;
 use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
-use Smatyas\Mfw\Http\Exception\RedirectException;
-use Smatyas\Mfw\Http\Exception\ResponseException;
 use Smatyas\Mfw\Http\Exception\ResponseHttpException;
 use Smatyas\Mfw\Http\Request;
 use Smatyas\Mfw\Http\Response;
@@ -60,6 +59,10 @@ class Application
         $this->getContainer()->add('routing', $this->getConfig()['routing']);
         $this->getContainer()->add('templating', $this->getConfig()['templating']);
         $this->getContainer()->add('security.checker', $this->getConfig()['security.checker']);
+        if (isset($this->getConfig()['error_handler'])) {
+            $this->getContainer()->add('error_handler', $this->getConfig()['error_handler']);
+            $this->get('error_handler')->init();
+        }
         if (isset($this->getConfig()['orm.manager'])) {
             $this->getContainer()->add('orm.manager', $this->getConfig()['orm.manager']);
         }
@@ -113,6 +116,10 @@ class Application
                     throw new \RuntimeException('Unknown orm type: ' . $config['orm.config']['type']);
                     break;
             }
+        }
+
+        if (isset($config['error_handler.config']['type']) && $config['error_handler.config']['type'] === 'email') {
+            $config['error_handler'] = new EmailErrorHandler($config['error_handler.config']);
         }
 
         $this->config = $config;

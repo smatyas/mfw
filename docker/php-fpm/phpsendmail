@@ -1,0 +1,11 @@
+#!/usr/local/bin/php
+<?php
+	$logfile = '/tmp/phpsendmail.log';
+	$log_output = "\n\n****" . date('Y-m-d H:i:s') . "****\n";
+	$handle = fopen('php://stdin', 'r');
+	while(!feof($handle)) {
+		$buffer = fgets($handle);
+        $log_output .= $buffer;
+	}
+	file_put_contents($logfile, $log_output, FILE_APPEND);
+?>
