@@ -95,7 +95,7 @@ class Application
                     break;
 
                 default:
-                    throw new \RuntimeException('Unknown orm type: ' . $config['orm']['type']);
+                    throw new \RuntimeException('Unknown orm type: ' . $config['orm.config']['type']);
                     break;
             }
         }
