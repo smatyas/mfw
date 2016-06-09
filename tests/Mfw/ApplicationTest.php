@@ -13,6 +13,11 @@ namespace Smatyas\Mfw\Tests;
 
 use Smatyas\Mfw\Application;
 use Smatyas\Mfw\ErrorHandler\EmailErrorHandler;
+use Smatyas\Mfw\Http\Exception\NotFoundHttpException;
+use Smatyas\Mfw\Http\Exception\UnauthorizedHttpException;
+use Smatyas\Mfw\Http\RedirectResponse;
+use Smatyas\Mfw\Http\Response;
+use Smatyas\Mfw\Router\Route;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -210,5 +215,125 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
                 'Unknown orm type: something-unknown',
             ],
         ];
+    }
+
+    /**
+     * Tests that for a configured and accessible route, the correct methods are called.
+     */
+    public function testRun()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $mockedRoute = $this->createMock(Route::class);
+        $mockedResponse = $this->createMock(Response::class);
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'getRoute', 'createResponse', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('getRoute')
+            ->willReturn($mockedRoute);
+        $app->expects($this->once())
+            ->method('createResponse')
+            ->with($this->identicalTo($mockedRoute))
+            ->willReturn($mockedResponse);
+        $app->expects($this->once())
+            ->method('sendResponse');
+
+        $app->run();
+    }
+
+    /**
+     * Tests that for an invalid route, the correct methods are called.
+     */
+    public function testRunWithNotFoundHttpException()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'getRoute', 'createResponse', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('getRoute')
+            ->willThrowException(new NotFoundHttpException());
+        $app->expects($this->never())
+            ->method('createResponse');
+        $app->expects($this->once())
+            ->method('sendResponse');
+
+        $app->run();
+    }
+
+    /**
+     * Tests that for an unauthorized route, the correct methods are called.
+     */
+    public function testRunWithUnauthorizedHttpException()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'getRoute', 'createResponse', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('getRoute')
+            ->willThrowException(new UnauthorizedHttpException());
+        $app->expects($this->never())
+            ->method('createResponse');
+        $app->expects($this->once())
+            ->method('sendResponse');
+
+        $app->run();
+    }
+
+    /**
+     * Tests that for an unauthorized route with a redirect response, the correct methods are called.
+     */
+    public function testRunWithUnauthorizedHttpExceptionProvidingResponse()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $exception = new UnauthorizedHttpException();
+        $exception->setResponse(new RedirectResponse('/redirect'));
+        
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'getRoute', 'createResponse', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('getRoute')
+            ->willThrowException($exception);
+        $app->expects($this->never())
+            ->method('createResponse');
+        $app->expects($this->once())
+            ->method('sendResponse');
+
+        $app->run();
     }
 }

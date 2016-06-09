@@ -130,15 +130,17 @@ class Application
      */
     public function run()
     {
-        session_start();
+        $this->sessionStart();
         try {
-            $request = Request::createFromGlobals();
-            $route = $this->getRoute($request);
-            $response = $this->createResponse($route, $request);
-        } catch (ResponseHttpException $e) {
-            if (!$response = $e->getResponse()) {
-                // Throw it further if the exception does not contain a response.
-                throw $e;
+            try {
+                $request = Request::createFromGlobals();
+                $route = $this->getRoute($request);
+                $response = $this->createResponse($route, $request);
+            } catch (ResponseHttpException $e) {
+                if (!($response = $e->getResponse())) {
+                    // Throw it further if the exception does not contain a response.
+                    throw $e;
+                }
             }
         } catch (HttpException $e) {
             $response = new Response($e->getMessage(), $e->getResponseCode());
@@ -246,6 +248,8 @@ class Application
      * Sends the response to the client.
      *
      * @param Response $response
+     *
+     * @codeCoverageIgnore
      */
     protected function sendResponse(Response $response)
     {
@@ -254,5 +258,15 @@ class Application
             header($header);
         }
         print $response->getBody();
+    }
+
+    /**
+     * Starts the PHP session.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function sessionStart()
+    {
+        session_start();
     }
 }
