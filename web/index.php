@@ -22,13 +22,13 @@ $applicationConfig = [
         ],
     ],
     'security.config' => [
-        'login_path' => '/login',
+        'login_path' => '/login', // The user will be redirected to this url if not authenticated.
         'paths' => [
             '/page1' => ['PAGE_1'],
             '/page2' => ['PAGE_2'],
         ],
     ],
-    
+
 // Enable the email error handler here by uncommenting the lines below.
 //
 //    'error_handler.config' => [

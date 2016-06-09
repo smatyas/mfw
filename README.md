@@ -17,13 +17,17 @@ The framework consists of the following custom main parts:
   - templating
   
 The main entry point of the POC application is the `web/index.php`.
-The framework configuration and the application setup in in this file.
+The framework configuration and the application setup is in this file.
 
 This repository contains a docker environment setup for testing purposes, 
 so you can easily try out and play around with the app.
 The requests will hit a load balancer that dispatches them to two workers in round-robin.
 Both workers are connected to the same memcached and mysql instance. 
 The session handling is transparent (using memcached).
+
+The example database contains 3 users: user1, user2, user3.
+The `/page1` is only accessible for user1 and user3 after login.
+The `/page2` is only accessible for user2 and user3 after login.
 
 Running and testing
 ===================
@@ -95,7 +99,7 @@ Running and testing
 10. Checking sent mails (if the custom error handler is enabled in `web/index.php`)
 
     Due to mail sending issues from docker, emails are actually not sent. 
-    The php is configured to use a custom mail sending script: `docker/php-fpm/phpsendmail`
+    The php is configured to use a custom mail sending script: `docker/php-fpm/phpsendmail`. 
     The script writes all mail into `/tmp/phpsendmail.log`, so you can easily monitor them using the following command:
     
     ```
