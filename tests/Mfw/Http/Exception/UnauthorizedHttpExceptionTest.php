@@ -50,5 +50,4 @@ class UnauthorizedHttpExceptionTest extends \PHPUnit_Framework_TestCase
             ['Not today...', 'Not today...', new Response('test2')],
         ];
     }
-
 }
