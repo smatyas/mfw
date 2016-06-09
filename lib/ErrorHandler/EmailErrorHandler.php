@@ -11,6 +11,11 @@
 
 namespace Smatyas\Mfw\ErrorHandler;
 
+/**
+ * A custom error handler implementation that sends the details in email.
+ *
+ * @codeCoverageIgnore
+ */
 class EmailErrorHandler
 {
     /**
