@@ -81,20 +81,28 @@ class Application
             }
         }
 
-        if (isset($config['routing']) && !($config['routing'] instanceof RouterInterface)) {
-            throw new \RuntimeException('The "routing" service must implement the RouterInterface');
+        if (isset($config['routing'])) {
+            if (!($config['routing'] instanceof RouterInterface)) {
+                throw new \RuntimeException('The "routing" service must implement the RouterInterface');
+            }
         } else {
             $config['routing'] = new Router();
         }
 
-        if (isset($config['templating']) && !($config['templating'] instanceof TemplatingInterface)) {
-            throw new \RuntimeException('The "templating" service must implement the TemplatingInterface');
+        if (isset($config['templating'])) {
+            if (!($config['templating'] instanceof TemplatingInterface)) {
+                throw new \RuntimeException('The "templating" service must implement the TemplatingInterface');
+            }
         } else {
             $config['templating'] = new Templating($config['app_base_path']);
         }
 
-        if (isset($config['security.checker']) && !($config['security.checker'] instanceof SecurityCheckerInterface)) {
-            throw new \RuntimeException('The "security.checker" service must implement the SecurityCheckerInterface');
+        if (isset($config['security.checker'])) {
+            if (!($config['security.checker'] instanceof SecurityCheckerInterface)) {
+                throw new \RuntimeException(
+                    'The "security.checker" service must implement the SecurityCheckerInterface'
+                );
+            }
         } else {
             if (!isset($config['security.config'])) {
                 throw new \RuntimeException('The "security.config" application parameter is missing.');

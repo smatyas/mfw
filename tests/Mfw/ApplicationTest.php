@@ -18,6 +18,9 @@ use Smatyas\Mfw\Http\Exception\UnauthorizedHttpException;
 use Smatyas\Mfw\Http\RedirectResponse;
 use Smatyas\Mfw\Http\Response;
 use Smatyas\Mfw\Router\Route;
+use Smatyas\Mfw\Router\Router;
+use Smatyas\Mfw\Security\SecurityChecker;
+use Smatyas\Mfw\Templating\Templating;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -438,5 +441,116 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app->addRoute('/', '\\stdClass');
 
         $app->run();
+    }
+
+    /**
+     * Tests that the createResponse method works as expected.
+     */
+    public function testCreateResponse()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $response = new Response('test');
+
+        $route = $this->getMockBuilder(Route::class)
+            ->setMethods(['handle'])
+            ->getMock();
+        $route->expects($this->once())
+            ->method('handle')
+            ->willReturn($response);
+        $route->setPath('/');
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('sendResponse')
+            ->with($this->identicalTo($response));
+
+        // Adding a route using the service to be able to match them perfectly.
+        $app->get('routing')->addRoute($route);
+
+        $app->run();
+    }
+
+    /**
+     * Tests that the createResponse method calls templating render when needed.
+     */
+    public function testCreateResponseRenders()
+    {
+        $templateParams = ['var1' => 'content1'];
+        $mockedTemplating = $this->getMockBuilder(Templating::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['render'])
+            ->getMock();
+        $mockedTemplating->expects($this->once())
+            ->method('render')
+            ->with(
+                $this->identicalTo('/tmp/something.html.tpl'),
+                $this->identicalTo($templateParams)
+            )
+            ->willReturn('rendered template');
+
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+            'templating' => $mockedTemplating,
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $route = $this->getMockBuilder(Route::class)
+            ->setMethods(['handle', 'getTemplatePath'])
+            ->getMock();
+        $route->expects($this->once())
+            ->method('handle')
+            ->willReturn($templateParams);
+        $route->expects($this->once())
+            ->method('getTemplatePath')
+            ->willReturn('/tmp/something.html.tpl');
+        $route->setPath('/');
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'sendResponse'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('sendResponse');
+
+        // Adding a route using the service to be able to match them perfectly.
+        $app->get('routing')->addRoute($route);
+
+        $app->run();
+    }
+
+    /**
+     * Tests that default service overriding works.
+     */
+    public function testServiceOverrides()
+    {
+        $templating = $this->createMock(Templating::class);
+        $routing = $this->createMock(Router::class);
+        $securityChecker = $this->createMock(SecurityChecker::class);
+
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+            'templating' => $templating,
+            'routing' => $routing,
+            'security.checker' => $securityChecker,
+        ];
+
+        $app = new Application($config);
+        $this->assertSame($templating, $app->get('templating'));
+        $this->assertSame($routing, $app->get('routing'));
+        $this->assertSame($securityChecker, $app->get('security.checker'));
     }
 }
