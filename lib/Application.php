@@ -143,7 +143,7 @@ class Application
                 }
             }
         } catch (HttpException $e) {
-            $response = new Response($e->getMessage(), $e->getResponseCode());
+            $response = $this->createResponseFromHttpException($e);
         }
         $this->sendResponse($response);
     }
@@ -268,5 +268,17 @@ class Application
     protected function sessionStart()
     {
         session_start();
+    }
+
+    /**
+     * Creates a Response object from a HttpException.
+     *
+     * @param HttpException $e
+     *
+     * @return Response
+     */
+    protected function createResponseFromHttpException(HttpException $e)
+    {
+        return new Response($e->getMessage(), $e->getResponseCode());
     }
 }

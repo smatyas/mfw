@@ -321,7 +321,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $exception = new UnauthorizedHttpException();
         $exception->setResponse(new RedirectResponse('/redirect'));
-        
+
         $app = $this->getMockBuilder(Application::class)
             ->setConstructorArgs([$config])
             ->setMethods(['sessionStart', 'getRoute', 'createResponse', 'sendResponse'])
@@ -333,6 +333,109 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->method('createResponse');
         $app->expects($this->once())
             ->method('sendResponse');
+
+        $app->run();
+    }
+
+    /**
+     * Tests that getting a nonexistent route work as expected;
+     */
+    public function testRouteNotExists()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $response = new Response('test');
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'createResponse', 'sendResponse', 'createResponseFromHttpException'])
+            ->getMock();
+        $app->expects($this->never())
+            ->method('createResponse');
+        $app->expects($this->once())
+            ->method('createResponseFromHttpException')
+            ->with($this->isInstanceOf(NotFoundHttpException::class))
+            ->willReturn($response);
+        $app->expects($this->once())
+            ->method('sendResponse')
+            ->with($this->identicalTo($response));
+
+        $app->run();
+    }
+
+    /**
+     * Tests that a route added directly into the 'routing' service gets matched.
+     */
+    public function testRouteExists()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $route = new Route();
+        $route->setPath('/');
+        $response = new Response('test');
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'createResponse', 'sendResponse', 'createResponseFromHttpException'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('createResponse')
+            ->with($this->identicalTo($route))
+            ->willReturn($response);
+        $app->expects($this->never())
+            ->method('createResponseFromHttpException');
+        $app->expects($this->once())
+            ->method('sendResponse')
+            ->with($this->identicalTo($response));
+
+        // Adding a route using the service to be able to match them perfectly.
+        $app->get('routing')->addRoute($route);
+
+        $app->run();
+    }
+
+    /**
+     * Tests that a route added through the helper function gets matched.
+     */
+    public function testRouteExistsUsingHelper()
+    {
+        $config = [
+            'app_base_path' => __DIR__ . '/test_app',
+            'security.config' => [],
+        ];
+
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $response = new Response('test');
+
+        $app = $this->getMockBuilder(Application::class)
+            ->setConstructorArgs([$config])
+            ->setMethods(['sessionStart', 'createResponse', 'sendResponse', 'createResponseFromHttpException'])
+            ->getMock();
+        $app->expects($this->once())
+            ->method('createResponse')
+            ->willReturn($response);
+        $app->expects($this->never())
+            ->method('createResponseFromHttpException');
+        $app->expects($this->once())
+            ->method('sendResponse')
+            ->with($this->identicalTo($response));
+
+        // Adding a route using the application helper.
+        $app->addRoute('/', '\\stdClass');
 
         $app->run();
     }
