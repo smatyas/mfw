@@ -12,6 +12,7 @@
 namespace Smatyas\Mfw\Tests;
 
 use Smatyas\Mfw\Application;
+use Smatyas\Mfw\ErrorHandler\EmailErrorHandler;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,6 +48,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             if (isset($config['orm.config'])) {
                 $this->assertArrayHasKey('orm.manager', $appConfig);
             }
+
+            if (isset($config['error_handler.config']['type']) && $config['error_handler.config']['type'] === 'email') {
+                $this->assertInstanceOf(EmailErrorHandler::class, $app->get('error_handler'));
+            }
         }
     }
 
@@ -70,6 +75,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'security.config' => [],
+                    'error_handler.config' => [
+                        'type' => 'email',
+                        'to' => 'ops@example.com',
+                    ],
                 ],
                 null,
                 null,
@@ -128,6 +137,42 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
                 ],
                 '\\RuntimeException',
                 'The "templating" service must implement the TemplatingInterface',
+            ],
+            [
+                [
+                    'app_base_path' => __DIR__ . '/test_app',
+                    'security.checker' => new \stdClass(),
+                    'orm.config' => [
+                        'type' => 'mfw',
+                        'host' => 'db',
+                        'database' => 'mfw',
+                        'username' => 'mfw',
+                        'password' => 'mfw',
+                        'mapping' => [
+                            'test' => 'Smatyas\\Mfw\\Tests\\Orm\\TestEntity',
+                        ],
+                    ],
+                    'security.config' => [],
+                ],
+                '\\RuntimeException',
+                'The "security.checker" service must implement the SecurityCheckerInterface',
+            ],
+            [
+                [
+                    'app_base_path' => __DIR__ . '/test_app',
+                    'orm.config' => [
+                        'type' => 'mfw',
+                        'host' => 'db',
+                        'database' => 'mfw',
+                        'username' => 'mfw',
+                        'password' => 'mfw',
+                        'mapping' => [
+                            'test' => 'Smatyas\\Mfw\\Tests\\Orm\\TestEntity',
+                        ],
+                    ],
+                ],
+                '\\RuntimeException',
+                'The "security.config" application parameter is missing.',
             ],
             [
                 [
