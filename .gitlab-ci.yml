@@ -5,10 +5,14 @@ stages:
   - test
 #  - deploy
 
-#before_script:
+cache:
+  paths:
+    - vendor/
+
+before_script:
 #  - ci/docker_install.sh
-#  - ci/composer_installer.sh
-#  - composer install
+  - ci/composer_installer.sh
+  - composer install
 
 install-deps:
   stage: build
@@ -17,10 +21,6 @@ install-deps:
     - ci/composer_installer.sh
     - composer install
     - php -i
-  artifacts:
-    expire_in: 1h
-    paths:
-      - vendor/
 
 test:code-style:
   stage: test
