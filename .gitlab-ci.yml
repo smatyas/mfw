@@ -5,10 +5,7 @@ before_script:
   - ci/composer_installer.sh
   - composer install
 
-code-style:
+test:
   script:
   - vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
-  
-phpunit:
-  script:
   - vendor/bin/phpunit
