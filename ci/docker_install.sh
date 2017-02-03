@@ -7,4 +7,4 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -y
-apt-get install git -y
+apt-get install git wget -y
