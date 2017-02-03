@@ -16,6 +16,7 @@ install-deps:
     - ci/docker_install.sh
     - ci/composer_installer.sh
     - composer install
+    - php -i
   artifacts:
     expire_in: 1h
     paths:

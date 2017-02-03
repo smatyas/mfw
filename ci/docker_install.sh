@@ -9,5 +9,6 @@ set -xe
 apt-get update -y
 apt-get install -y git wget zip unzip mysql-client libicu-dev zlib1g-dev libmemcached-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev
 pecl install xdebug
+echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
 docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 docker-php-ext-install pdo_mysql opcache gd
