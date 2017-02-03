@@ -30,4 +30,5 @@ test:code-style:
 test:phpunit:
   stage: test
   script:
+    - php -i
     - vendor/bin/phpunit -c phpunit.gitlab-ci.xml
