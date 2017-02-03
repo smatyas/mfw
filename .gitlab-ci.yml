@@ -5,14 +5,16 @@ stages:
   - test
 #  - deploy
 
-before_script:
-  - ci/docker_install.sh
-  - ci/composer_installer.sh
+#before_script:
+#  - ci/docker_install.sh
+#  - ci/composer_installer.sh
 #  - composer install
 
 install-deps:
   stage: build
   script:
+  - ci/docker_install.sh
+  - ci/composer_install.sh
   - composer install
 
 run-test:
