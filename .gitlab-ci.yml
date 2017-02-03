@@ -1,0 +1,10 @@
+image: php:5.6
+
+before_script:
+  - ci/docker_install.sh
+  - ci/composer_installer.sh
+  - composer install
+
+test:app:
+  script:
+  - ./endor/bin/phpunit
