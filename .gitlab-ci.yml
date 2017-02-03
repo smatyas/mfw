@@ -10,15 +10,15 @@ cache:
     - vendor/
 
 before_script:
-#  - ci/docker_install.sh
+  - ci/docker_install.sh
   - ci/composer_installer.sh
   - composer install
 
 install-deps:
   stage: build
   script:
-    - ci/docker_install.sh
-    - ci/composer_installer.sh
+#    - ci/docker_install.sh
+#    - ci/composer_installer.sh
     - composer install
     - php -i
 
