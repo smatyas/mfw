@@ -21,8 +21,12 @@ install-deps:
     paths:
       - vendor/
 
-run-test:
+test:code-style:
   stage: test
   script:
     - vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
+    
+test:phpunit:
+  stage: test
+  script:
     - vendor/bin/phpunit
