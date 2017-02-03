@@ -13,12 +13,15 @@ stages:
 install-deps:
   stage: build
   script:
-  - ci/docker_install.sh
-  - ci/composer_installer.sh
-  - composer install
+    - ci/docker_install.sh
+    - ci/composer_installer.sh
+    - composer install
+  artifacts:
+    paths:
+      - vendor/
 
 run-test:
   stage: test
   script:
-  - vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
-  - vendor/bin/phpunit
+    - vendor/bin/phpcs --standard=PSR2 lib/ src/ tests/ web/
+    - vendor/bin/phpunit
