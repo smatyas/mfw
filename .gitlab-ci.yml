@@ -14,7 +14,7 @@ install-deps:
   stage: build
   script:
   - ci/docker_install.sh
-  - ci/composer_install.sh
+  - ci/composer_installer.sh
   - composer install
 
 run-test:
